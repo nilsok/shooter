@@ -3,32 +3,33 @@ package com.nilsok.shooter;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Logger;
 import com.nilsok.shooter.client.ClientNetworking;
+import com.nilsok.shooter.client.InputNameScreen;
+import com.nilsok.shooter.client.render.GameRenderer;
 import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.Player;
+import com.nilsok.shooter.model.GameOnClient;
 import com.nilsok.shooter.model.command.Join;
 import com.nilsok.shooter.model.command.Shoot;
 import com.nilsok.shooter.model.command.UpdatePosition;
-import com.nilsok.shooter.render.GameRenderer;
+
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class ClientGame extends ApplicationAdapter {
+public class ClientApp extends ApplicationAdapter {
 
     Game game;
     GameRenderer renderer;
     ClientNetworking networking;
+    InputNameScreen inputNameScreen;
     String playerName;
 
 	@Override
 	public void create () {
-        game = new Game();
+        playerName = UUID.randomUUID().toString();
+        game = new GameOnClient(playerName);
         renderer = new GameRenderer();
+        //inputNameScreen = new InputNameScreen();
 
         try {
             networking = new ClientNetworking(game);
@@ -38,7 +39,7 @@ public class ClientGame extends ApplicationAdapter {
         }
 
         configureInputHandling();
-        playerName = networking.getIp();
+
 
         networking.sendCommand(new Join(playerName));
 	}
@@ -47,6 +48,7 @@ public class ClientGame extends ApplicationAdapter {
 	public void render () {
         game.tick();
         renderer.render(game);
+
 	}
 
     private void configureInputHandling() {
@@ -63,6 +65,10 @@ public class ClientGame extends ApplicationAdapter {
                 return true;
             }
         });
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 
     private int getMouseX() {

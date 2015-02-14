@@ -1,5 +1,7 @@
 package com.nilsok.shooter.model;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.AtomicQueue;
 import com.badlogic.gdx.utils.IntMap;
@@ -9,6 +11,7 @@ import com.nilsok.shooter.model.command.Join;
 import com.nilsok.shooter.model.command.Leave;
 import com.nilsok.shooter.model.command.Shoot;
 import com.nilsok.shooter.model.command.UpdatePosition;
+import com.nilsok.shooter.server.ServerNetworking;
 
 
 import java.util.HashMap;
@@ -26,13 +29,10 @@ public class Game {
         public Map<String, Player> players;
         private AtomicQueue<Command> commandQueue;
 
-        private int framesSinceLastTargetHit = 0;
-
         public Game() {
             target = null;
             players = new HashMap<String, Player>();
             commandQueue = new AtomicQueue<Command>(20);
-            framesSinceLastTargetHit = 0;
         }
 
 
@@ -43,52 +43,40 @@ public class Game {
 
         public void tick() {
             frame++;
-
             Command nextCommand;
             while ((nextCommand = commandQueue.poll()) != null) {
-
-                if (nextCommand instanceof Shoot) {
-                    checkIfHit((Shoot) nextCommand);
-                }
-
-                if (nextCommand instanceof UpdatePosition) {
-                    UpdatePosition position = (UpdatePosition) nextCommand;
-                    players.get(position.id()).crosshairs.setPosition(position.x, position.y);
-                }
-
-                if (nextCommand instanceof Join) {
-                    Join join = (Join) nextCommand;
-                    players.put(join.name, new Player(join.name));
-                }
-
-                if (nextCommand instanceof Leave) {
-                    Leave leave = (Leave) nextCommand;
-                    players.remove(leave.name);
-                }
-
+                executeCommand(nextCommand);
             }
-
-            if (this.target == null) {
-                checkAndSpawnTarget();
-            } else if (this.target.isHit) {
-                this.target = null;
-                framesSinceLastTargetHit= 0;
-            }
-
-            framesSinceLastTargetHit++;
         }
 
-    private void checkAndSpawnTarget() {
-        if (framesSinceLastTargetHit > Const.TARGET_SPAWN_INTERVAL) {
-            target = new Target();
+    protected void executeCommand(Command nextCommand) {
+
+        if (nextCommand instanceof UpdatePosition) {
+            UpdatePosition position = (UpdatePosition) nextCommand;
+            if (!players.containsKey(position.id())) {
+                players.put(position.id(), new Player(position.id()));
+            }
+            players.get(position.id()).crosshairs.setPosition(position.x, position.y);
+            pushToClientIfServer(nextCommand);
         }
+
+        if (nextCommand instanceof Join) {
+            Join join = (Join) nextCommand;
+            players.put(join.name, new Player(join.name));
+            pushToClientIfServer(nextCommand);
+        }
+
+        if (nextCommand instanceof Leave) {
+            Leave leave = (Leave) nextCommand;
+            players.remove(leave.name);
+            pushToClientIfServer(nextCommand);
+        }
+
+
     }
 
-    private void checkIfHit(Shoot shot) {
-        if (this.target != null) {
-            target.isHit = true;
-            players.get(shot.id()).score++;
-        }
+    protected void pushToClientIfServer(Command nextCommand) {
+        // Default does nothing
     }
 
 }

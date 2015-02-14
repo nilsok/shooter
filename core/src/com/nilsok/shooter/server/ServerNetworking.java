@@ -8,10 +8,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.command.Join;
-import com.nilsok.shooter.model.command.Leave;
-import com.nilsok.shooter.model.command.Shoot;
-import com.nilsok.shooter.model.command.UpdatePosition;
+import com.nilsok.shooter.model.command.*;
 
 import java.io.IOException;
 
@@ -32,7 +29,7 @@ public class ServerNetworking {
         registerCommandsWithKryo();
 
         try {
-            this.server.bind(Const.TCP_PORT);
+            this.server.bind(Const.TCP_PORT, Const.UDP_PORT);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("CANNOT START SERVER!!");
@@ -45,7 +42,6 @@ public class ServerNetworking {
             @Override
             public void received(Connection connection, Object command) {
                 if (command instanceof Command) {
-                    System.out.println("server recieved command: " + command);
                     game.addCommand((Command) command);
                     executedCommands.put((Command) command);
                 }
@@ -59,6 +55,8 @@ public class ServerNetworking {
         kryo.register(Leave.class);
         kryo.register(Shoot.class);
         kryo.register(UpdatePosition.class);
+        kryo.register(ShowTarget.class);
+        kryo.register(TargetHit.class);
     }
 
     public void pushCommands() {
@@ -69,4 +67,7 @@ public class ServerNetworking {
     }
 
 
+    public void addCommand(Command command) {
+        this.executedCommands.put(command);
+    }
 }

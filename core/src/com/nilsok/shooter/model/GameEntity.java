@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class GameEntity {
     private int x, y;
-    private Rectangle rectangle;
+    public Rectangle rectangle;
 
     public GameEntity(int startX, int startY, int width, int height) {
         this.rectangle = new Rectangle(startX, startY, width, height);
@@ -26,4 +26,11 @@ public class GameEntity {
         this.y = y;
     }
 
+    public int getWidth() {
+        return (int) this.rectangle.getWidth();
+    }
+
+    public int getHeight() {
+        return (int) this.rectangle.getHeight();
+    }
 }

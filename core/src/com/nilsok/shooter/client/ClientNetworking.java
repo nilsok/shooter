@@ -7,10 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.command.Join;
-import com.nilsok.shooter.model.command.Leave;
-import com.nilsok.shooter.model.command.Shoot;
-import com.nilsok.shooter.model.command.UpdatePosition;
+import com.nilsok.shooter.model.command.*;
 
 import java.io.IOException;
 
@@ -27,20 +24,27 @@ public class ClientNetworking {
         this.client = new Client();
         registerCommandsWithKryo();
         this.client.start();
-        this.client.connect(5000, Const.HOST, Const.TCP_PORT);
+        this.client.connect(5000, Const.HOST, Const.TCP_PORT, Const.UDP_PORT);
+
+
+
         this.client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object command) {
                 if (command instanceof Command) {
-                    System.out.println("client recieved command from server: " + command);
+                    if (!(command instanceof UpdatePosition)) {
+                        System.out.println("Client recieved command: " + command.getClass().getSimpleName());
+                    }
                     game.addCommand((Command) command);
                 }
             }
         });
+
+
     }
 
     public void sendCommand(Command c) {
-        this.client.sendTCP(c);
+        this.client.sendUDP(c);
     }
 
     public String getIp() {
@@ -53,5 +57,7 @@ public class ClientNetworking {
         kryo.register(Leave.class);
         kryo.register(Shoot.class);
         kryo.register(UpdatePosition.class);
+        kryo.register(ShowTarget.class);
+        kryo.register(TargetHit.class);
     }
 }

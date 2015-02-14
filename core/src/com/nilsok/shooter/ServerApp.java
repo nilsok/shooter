@@ -2,20 +2,20 @@ package com.nilsok.shooter;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.nilsok.shooter.model.Game;
+import com.nilsok.shooter.model.GameOnServer;
 import com.nilsok.shooter.server.ServerNetworking;
 
 /**
  * Created by fimpen on 15-01-25.
  */
-public class ServerGame implements ApplicationListener {
+public class ServerApp implements ApplicationListener {
 
-    private Game game;
+    private GameOnServer game;
     private ServerNetworking networking;
 
     @Override
     public void create() {
-        this.game = new Game();
-        this.networking = new ServerNetworking(game);
+        this.game = new GameOnServer();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ServerGame implements ApplicationListener {
     @Override
     public void render() {
         game.tick();
-        networking.pushCommands();
+        game.getNetworking().pushCommands();
     }
 
     @Override
