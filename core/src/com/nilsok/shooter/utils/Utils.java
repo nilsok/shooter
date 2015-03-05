@@ -11,4 +11,8 @@ public final class Utils {
     public static int gameYtoScreenY(int gameY) {
         return Gdx.graphics.getHeight() - gameY;
     }
+
+    public static int screenYtoGameY(int screenY) {
+        return  Gdx.graphics.getHeight() - screenY;
+    }
 }

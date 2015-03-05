@@ -10,6 +10,8 @@ public class GameEntity {
     public Rectangle rectangle;
 
     public GameEntity(int startX, int startY, int width, int height) {
+        this.x = startX;
+        this.y = startY;
         this.rectangle = new Rectangle(startX, startY, width, height);
     }
 

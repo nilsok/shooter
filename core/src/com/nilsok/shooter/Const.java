@@ -5,11 +5,13 @@ package com.nilsok.shooter;
  */
 public interface Const {
 
-    public static final int TARGET_SPAWN_INTERVAL = 60*3;
+    public static final int TARGET_SPAWN_INTERVAL = 30;
 
+    public static final String HOST = "192.168.0.112";
     public static final int TCP_PORT = 9165;
     public static final int UDP_PORT = 9166;
-    //public static final String HOST = "192.168.0.113";
-    public static final String HOST = "192.168.0.111";
 
+    public static final float TARGET_RADIUS = 100.0f;
+
+    int SHOOTING_DELAY = 30;
 }

@@ -15,14 +15,17 @@ public class Target extends GameEntity {
 
     public Target(int x, int y) {
         super(x, y, 100, 100);
-        this.circle = new Circle(x, y, 100);
+        this.circle = new Circle(x, y, 110);
     }
 
 
     public boolean shotHit(Shoot shot) {
 
         System.out.println("shot.x: " + shot.x);
-        System.out.println("shot.x: " + shot.y);
+        System.out.println("shot.y: " + shot.y);
+
+        System.out.println("target.x: " + this.getX());
+        System.out.println("target.y: " + this.getY());
 
         return circle.contains(shot.x, shot.y);
     }

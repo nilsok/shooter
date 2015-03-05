@@ -10,6 +10,7 @@ import com.nilsok.shooter.model.Game;
 import com.nilsok.shooter.model.command.*;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  * Created by fimpen on 15-01-25.
@@ -24,7 +25,10 @@ public class ClientNetworking {
         this.client = new Client();
         registerCommandsWithKryo();
         this.client.start();
+
+        InetAddress address = client.discoverHost(Const.UDP_PORT, 4000);
         this.client.connect(5000, Const.HOST, Const.TCP_PORT, Const.UDP_PORT);
+//        this.client.connect(5000, "192.168.0.11", Const.TCP_PORT, Const.UDP_PORT);
 
 
 
@@ -39,8 +43,6 @@ public class ClientNetworking {
                 }
             }
         });
-
-
     }
 
     public void sendCommand(Command c) {

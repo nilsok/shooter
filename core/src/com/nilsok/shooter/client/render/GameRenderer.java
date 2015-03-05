@@ -1,12 +1,12 @@
 package com.nilsok.shooter.client.render;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.GameOnClient;
+import com.nilsok.shooter.client.GameOnClient;
 import com.nilsok.shooter.model.Player;
 import com.nilsok.shooter.utils.Utils;
 
@@ -22,6 +22,8 @@ public class GameRenderer {
 
     private BitmapFont bitmapFont;
 
+    private Sound gunshot;
+
     public GameRenderer() {
         batch = new SpriteBatch();
         crosshairs = new Texture("crosshair.png");
@@ -29,11 +31,13 @@ public class GameRenderer {
 
         target = new Texture("target.png");
         bitmapFont = new BitmapFont();
+
+        this.gunshot = Gdx.audio.newSound(Gdx.files.internal("21513^GUNSHOT.mp3"));
     }
 
 
-    public void render(Game game) {
-        Gdx.gl.glClearColor(99, 88, 0.2f, 1);
+    public void render(GameOnClient game) {
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
@@ -43,8 +47,8 @@ public class GameRenderer {
         }
 
         for (Player player : game.players.values()) {
-            if (player.name.equals( ((GameOnClient) game).getPlayerName())) {
-                batch.draw(crosshairs, player.crosshairs.getX() - (crosshairs.getWidth() / 2), (Utils.gameYtoScreenY(player.crosshairs.getY()) - crosshairs.getHeight() /2));
+            if (player.name.equals(game.getPlayerName())) {
+                batch.draw(crosshairs, player.crosshairs.getX() - (crosshairs.getWidth() / 2), (Utils.gameYtoScreenY(player.crosshairs.getY()) - (crosshairs.getHeight() /2)));
             } else {
                 batch.draw(otherPlayersCrosshairs, player.crosshairs.getX() - (crosshairs.getWidth() / 2), (Utils.gameYtoScreenY(player.crosshairs.getY()) - crosshairs.getHeight() /2));
                 bitmapFont.draw(batch, player.name, player.crosshairs.getX(), Utils.gameYtoScreenY(player.crosshairs.getY() - (crosshairs.getHeight() / 2)));
@@ -52,6 +56,19 @@ public class GameRenderer {
             bitmapFont.draw(batch, player.name, 40, 40);
         }
 
+        if (game.isShooting() && game.getShootingDelay() == 1) {
+            gunshot.play(1.0f);
+        }
+
         batch.end();
+    }
+
+    public void dispose() {
+        crosshairs.dispose();
+        otherPlayersCrosshairs.dispose();
+        target.dispose();
+        bitmapFont.dispose();
+        gunshot.dispose();
+        batch.dispose();
     }
 }

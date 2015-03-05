@@ -1,9 +1,7 @@
 package com.nilsok.shooter;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.GameOnServer;
-import com.nilsok.shooter.server.ServerNetworking;
+import com.nilsok.shooter.server.GameOnServer;
 
 /**
  * Created by fimpen on 15-01-25.
@@ -11,7 +9,6 @@ import com.nilsok.shooter.server.ServerNetworking;
 public class ServerApp implements ApplicationListener {
 
     private GameOnServer game;
-    private ServerNetworking networking;
 
     @Override
     public void create() {

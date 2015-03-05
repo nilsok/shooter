@@ -17,12 +17,12 @@ import java.io.IOException;
  */
 public class ServerNetworking {
 
-    private final Game game;
+    private final GameOnServer game;
     private Server server;
 
     private AtomicQueue<Command> executedCommands;
 
-    public ServerNetworking(final Game game) {
+    public ServerNetworking(final GameOnServer game) {
         this.game = game;
         this.executedCommands = new AtomicQueue<Command>(20);
         this.server = new Server();
@@ -62,7 +62,7 @@ public class ServerNetworking {
     public void pushCommands() {
         Command nextCommand;
         while ((nextCommand = executedCommands.poll()) != null) {
-            server.sendToAllTCP(nextCommand);
+            server.sendToAllUDP(nextCommand);
         }
     }
 

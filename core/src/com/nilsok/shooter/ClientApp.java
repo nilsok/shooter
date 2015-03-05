@@ -6,8 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.nilsok.shooter.client.ClientNetworking;
 import com.nilsok.shooter.client.InputNameScreen;
 import com.nilsok.shooter.client.render.GameRenderer;
-import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.GameOnClient;
+import com.nilsok.shooter.client.GameOnClient;
 import com.nilsok.shooter.model.command.Join;
 import com.nilsok.shooter.model.command.Shoot;
 import com.nilsok.shooter.model.command.UpdatePosition;
@@ -18,7 +17,7 @@ import java.util.UUID;
 
 public class ClientApp extends ApplicationAdapter {
 
-    Game game;
+    GameOnClient game;
     GameRenderer renderer;
     ClientNetworking networking;
     InputNameScreen inputNameScreen;
@@ -61,7 +60,9 @@ public class ClientApp extends ApplicationAdapter {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                networking.sendCommand(new Shoot(playerName, screenX, screenY));
+                if (!game.isShooting()) {
+                    networking.sendCommand(new Shoot(playerName, screenX, screenY));
+                }
                 return true;
             }
         });
