@@ -5,9 +5,7 @@ import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.Game;
 import com.nilsok.shooter.model.Target;
-import com.nilsok.shooter.model.command.Shoot;
-import com.nilsok.shooter.model.command.ShowTarget;
-import com.nilsok.shooter.model.command.TargetHit;
+import com.nilsok.shooter.model.command.*;
 import com.nilsok.shooter.server.ServerNetworking;
 
 import java.util.Random;
@@ -30,6 +28,7 @@ public class GameOnServer extends Game {
         super.tick();
         checkAndSpawnTarget();
         framesSinceLastTargetHit++;
+
     }
 
     @Override
@@ -39,6 +38,19 @@ public class GameOnServer extends Game {
         if (nextCommand instanceof Shoot) {
             checkIfHit((Shoot) nextCommand);
         }
+
+        if (nextCommand instanceof Join) {
+            this.serverNetworking.addCommand(new GameState(this));
+        }
+
+        if (nextCommand instanceof GameState) {
+            GameState clientState = (GameState) nextCommand;
+            GameState serverState = new GameState(this);
+            if (!clientState.equals(serverState)) {
+                System.out.println("server and client state match: " + (clientState.hashCode() == serverState.hashCode()));
+            }
+        }
+
     }
 
     protected void checkAndSpawnTarget() {
@@ -65,6 +77,7 @@ public class GameOnServer extends Game {
                 framesSinceLastTargetHit = 0;
             }
         }
+
     }
 
     @Override

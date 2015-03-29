@@ -46,14 +46,16 @@ public class GameRenderer {
             batch.draw(target, game.target.getX() - (target.getWidth() / 2), Utils.gameYtoScreenY(game.target.getY()) - (target.getHeight() / 2));
         }
 
+        int playerCount = 0;
         for (Player player : game.players.values()) {
+            playerCount++;
             if (player.name.equals(game.getPlayerName())) {
                 batch.draw(crosshairs, player.crosshairs.getX() - (crosshairs.getWidth() / 2), (Utils.gameYtoScreenY(player.crosshairs.getY()) - (crosshairs.getHeight() /2)));
             } else {
                 batch.draw(otherPlayersCrosshairs, player.crosshairs.getX() - (crosshairs.getWidth() / 2), (Utils.gameYtoScreenY(player.crosshairs.getY()) - crosshairs.getHeight() /2));
                 bitmapFont.draw(batch, player.name, player.crosshairs.getX(), Utils.gameYtoScreenY(player.crosshairs.getY() - (crosshairs.getHeight() / 2)));
             }
-            bitmapFont.draw(batch, player.name, 40, 40);
+            bitmapFont.draw(batch, player.name + ": " + String.valueOf(player.score), 40, 40 + (playerCount*40));
         }
 
         if (game.isShooting() && game.getShootingDelay() == 1) {

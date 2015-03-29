@@ -8,9 +8,12 @@ import com.esotericsoftware.kryonet.Server;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.Game;
+import com.nilsok.shooter.model.GameEntity;
+import com.nilsok.shooter.model.Player;
 import com.nilsok.shooter.model.command.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by fimpen on 15-01-25.
@@ -43,7 +46,6 @@ public class ServerNetworking {
             public void received(Connection connection, Object command) {
                 if (command instanceof Command) {
                     game.addCommand((Command) command);
-                    executedCommands.put((Command) command);
                 }
             }
         });
@@ -57,6 +59,10 @@ public class ServerNetworking {
         kryo.register(UpdatePosition.class);
         kryo.register(ShowTarget.class);
         kryo.register(TargetHit.class);
+        kryo.register(GameState.class);
+        kryo.register(Player.class);
+        kryo.register(GameEntity.class);
+        kryo.register(ArrayList.class);
     }
 
     public void pushCommands() {

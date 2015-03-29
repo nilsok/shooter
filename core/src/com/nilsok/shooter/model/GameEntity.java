@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class GameEntity {
     private int x, y;
-    public Rectangle rectangle;
+
+    public GameEntity() {}
 
     public GameEntity(int startX, int startY, int width, int height) {
         this.x = startX;
         this.y = startY;
-        this.rectangle = new Rectangle(startX, startY, width, height);
     }
 
     public int getX() {
@@ -28,11 +28,23 @@ public class GameEntity {
         this.y = y;
     }
 
-    public int getWidth() {
-        return (int) this.rectangle.getWidth();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameEntity that = (GameEntity) o;
+
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+
+        return true;
     }
 
-    public int getHeight() {
-        return (int) this.rectangle.getHeight();
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
     }
 }

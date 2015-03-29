@@ -7,9 +7,7 @@ import com.nilsok.shooter.client.ClientNetworking;
 import com.nilsok.shooter.client.InputNameScreen;
 import com.nilsok.shooter.client.render.GameRenderer;
 import com.nilsok.shooter.client.GameOnClient;
-import com.nilsok.shooter.model.command.Join;
-import com.nilsok.shooter.model.command.Shoot;
-import com.nilsok.shooter.model.command.UpdatePosition;
+import com.nilsok.shooter.model.command.*;
 
 
 import java.io.IOException;
@@ -17,40 +15,55 @@ import java.util.UUID;
 
 public class ClientApp extends ApplicationAdapter {
 
+    public enum State {
+        ENTERING_NAME, PLAYING, DISPLAYING_SCORES
+    }
+
     GameOnClient game;
     GameRenderer renderer;
     ClientNetworking networking;
     InputNameScreen inputNameScreen;
     String playerName;
+    State state;
 
 	@Override
 	public void create () {
-        playerName = UUID.randomUUID().toString();
-        game = new GameOnClient(playerName);
         renderer = new GameRenderer();
-        //inputNameScreen = new InputNameScreen();
+        inputNameScreen = new InputNameScreen(this);
+        state = State.ENTERING_NAME;
+	}
 
+    @Override
+	public void render () {
+
+        if (this.state == State.ENTERING_NAME) {
+            inputNameScreen.render();
+        } else { // State == PLAYING
+            game.tick();
+            renderer.render(game);
+            // networking.sendCommand(new GameState(game));
+        }
+	}
+
+
+    public void startGame(String playerName) {
+        this.playerName = playerName;
+        game = new GameOnClient(playerName);
         try {
             networking = new ClientNetworking(game);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("CANNOT CONNECT TO SERVER!");
         }
-
-        configureInputHandling();
-
-
         networking.sendCommand(new Join(playerName));
-	}
+        configureGameInputHandling();
+        this.state = State.PLAYING;
+    }
 
-    @Override
-	public void render () {
-        game.tick();
-        renderer.render(game);
 
-	}
+    private void configureGameInputHandling() {
 
-    private void configureInputHandling() {
+
         Gdx.input.setInputProcessor(new InputAdapter(){
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
@@ -79,4 +92,11 @@ public class ClientApp extends ApplicationAdapter {
     private int getMouseY() {
         return Gdx.input.getY();
     }
+
+    @Override
+    public void dispose() {
+        networking.sendCommand(new Leave(this.playerName));
+        System.out.print("dispose()");
+    }
+
 }

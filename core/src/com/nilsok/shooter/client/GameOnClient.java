@@ -3,10 +3,14 @@ package com.nilsok.shooter.client;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.Game;
+import com.nilsok.shooter.model.Player;
 import com.nilsok.shooter.model.Target;
+import com.nilsok.shooter.model.command.GameState;
 import com.nilsok.shooter.model.command.Shoot;
 import com.nilsok.shooter.model.command.ShowTarget;
 import com.nilsok.shooter.model.command.TargetHit;
+
+import java.util.HashMap;
 
 /**
  * Created by fimpen on 15-01-31.
@@ -39,11 +43,25 @@ public class GameOnClient extends Game {
                 this.shootingDelay = 0;
             }
         }
+
     }
 
     @Override
     protected void executeCommand(Command nextCommand) {
         super.executeCommand(nextCommand);
+
+        if (nextCommand instanceof GameState) {
+            GameState gameState = (GameState) nextCommand;
+            super.players = new HashMap<String, Player>();
+            for (Player p : gameState.players) {
+                super.players.put(p.name, p);
+            }
+
+            if (gameState.target != null) {
+                super.target = new Target(gameState.target.getX(), gameState.target.getY());
+            }
+
+        }
 
         if (nextCommand instanceof ShowTarget) {
             System.out.println("SHOWING TARGET!");

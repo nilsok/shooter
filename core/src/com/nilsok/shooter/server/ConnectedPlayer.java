@@ -7,11 +7,6 @@ import java.net.InetAddress;
  */
 public class ConnectedPlayer {
 
-
-
-
-
-
     public void tick() {
 
     }

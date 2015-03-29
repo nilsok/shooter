@@ -12,6 +12,10 @@ public class Leave implements Command {
 
     public Leave() {}
 
+    public Leave(String name) {
+        this.name = name;
+    }
+
     @Override
     public String id() {
         return name;

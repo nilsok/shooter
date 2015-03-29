@@ -7,10 +7,7 @@ import com.badlogic.gdx.utils.AtomicQueue;
 import com.badlogic.gdx.utils.IntMap;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
-import com.nilsok.shooter.model.command.Join;
-import com.nilsok.shooter.model.command.Leave;
-import com.nilsok.shooter.model.command.Shoot;
-import com.nilsok.shooter.model.command.UpdatePosition;
+import com.nilsok.shooter.model.command.*;
 import com.nilsok.shooter.server.ServerNetworking;
 
 
@@ -50,6 +47,16 @@ public class Game {
         }
 
     protected void executeCommand(Command nextCommand) {
+
+        if (nextCommand instanceof GameState) {
+            GameState gameState = (GameState) nextCommand;
+
+            for (Player player : gameState.players) {
+                players.put(player.name, player);
+            }
+
+        }
+
 
         if (nextCommand instanceof UpdatePosition) {
             UpdatePosition position = (UpdatePosition) nextCommand;
