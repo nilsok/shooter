@@ -47,6 +47,7 @@ public class GameOnServer extends Game {
             GameState clientState = (GameState) nextCommand;
             GameState serverState = new GameState(this);
             if (!clientState.equals(serverState)) {
+                this.serverNetworking.addCommand(serverState);
                 System.out.println("server and client state match: " + (clientState.hashCode() == serverState.hashCode()));
             }
         }

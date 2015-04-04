@@ -16,7 +16,7 @@ import java.util.UUID;
 public class ClientApp extends ApplicationAdapter {
 
     public enum State {
-        ENTERING_NAME, PLAYING, DISPLAYING_SCORES
+        ENTERING_NAME, PLAYING
     }
 
     GameOnClient game;
@@ -41,7 +41,7 @@ public class ClientApp extends ApplicationAdapter {
         } else { // State == PLAYING
             game.tick();
             renderer.render(game);
-            // networking.sendCommand(new GameState(game));
+            networking.sendCommand(new GameState(game));
         }
 	}
 
@@ -95,7 +95,10 @@ public class ClientApp extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        networking.sendCommand(new Leave(this.playerName));
+        if (networking != null) {
+            networking.sendCommand(new Leave(this.playerName));
+        }
+        renderer.dispose();
         System.out.print("dispose()");
     }
 

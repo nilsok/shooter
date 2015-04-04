@@ -6,7 +6,7 @@ import com.nilsok.shooter.Command;
  * Created by fimpen on 15-01-24.
  */
 public class Shoot implements Command {
-    public String shooter;
+    private String shooter;
     public int x, y;
 
     public Shoot() {}
