@@ -2,11 +2,13 @@ package com.nilsok.shooter;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.nilsok.shooter.client.ClientNetworking;
 import com.nilsok.shooter.client.InputNameScreen;
 import com.nilsok.shooter.client.render.GameRenderer;
 import com.nilsok.shooter.client.GameOnClient;
+import com.nilsok.shooter.model.Direction;
 import com.nilsok.shooter.model.command.*;
 
 
@@ -65,19 +67,37 @@ public class ClientApp extends ApplicationAdapter {
 
 
         Gdx.input.setInputProcessor(new InputAdapter(){
+
             @Override
-            public boolean mouseMoved(int screenX, int screenY) {
-                networking.sendCommand(new UpdatePosition(playerName, screenX, screenY));
-                return true;
+            public boolean keyDown(int keycode) {
+
+                if (keycode == Input.Keys.UP) {
+                    networking.sendCommand(new Move(playerName, Direction.UP));
+                    return true;
+                } else if (keycode == Input.Keys.DOWN) {
+                    networking.sendCommand(new Move(playerName, Direction.DOWN));
+                    return true;
+                } else if (keycode == Input.Keys.LEFT) {
+                    networking.sendCommand(new Move(playerName, Direction.LEFT));
+                    return true;
+                }  else if (keycode == Input.Keys.RIGHT) {
+                    networking.sendCommand(new Move(playerName, Direction.RIGHT));
+                    return true;
+                } else if (keycode == Input.Keys.SPACE) {
+                    networking.sendCommand(new Shoot(playerName,
+                            game.players.get(playerName).crosshairs.getX(),
+                            game.players.get(playerName).crosshairs.getY()));
+                    return true;
+                }
+                return false;
             }
 
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                if (!game.isShooting()) {
-                    networking.sendCommand(new Shoot(playerName, screenX, screenY));
-                }
+            public boolean keyUp(int keycode) {
+                networking.sendCommand(new Stop(playerName));
                 return true;
             }
+
         });
     }
 

@@ -7,10 +7,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
-import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.GameEntity;
-import com.nilsok.shooter.model.Player;
+import com.nilsok.shooter.model.*;
 import com.nilsok.shooter.model.command.*;
+import com.nilsok.shooter.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,17 +51,7 @@ public class ServerNetworking {
     }
 
     private void registerCommandsWithKryo() {
-        Kryo kryo = server.getKryo();
-        kryo.register(Join.class);
-        kryo.register(Leave.class);
-        kryo.register(Shoot.class);
-        kryo.register(UpdatePosition.class);
-        kryo.register(ShowTarget.class);
-        kryo.register(TargetHit.class);
-        kryo.register(GameState.class);
-        kryo.register(Player.class);
-        kryo.register(GameEntity.class);
-        kryo.register(ArrayList.class);
+        Utils.registerCommandsWithKryo(server.getKryo());
     }
 
     public void pushCommands() {

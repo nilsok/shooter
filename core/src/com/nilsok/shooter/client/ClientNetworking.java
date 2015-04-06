@@ -6,10 +6,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.Const;
-import com.nilsok.shooter.model.Game;
-import com.nilsok.shooter.model.GameEntity;
-import com.nilsok.shooter.model.Player;
+import com.nilsok.shooter.model.*;
 import com.nilsok.shooter.model.command.*;
+import com.nilsok.shooter.utils.Utils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,7 +30,7 @@ public class ClientNetworking {
 
         InetAddress address = client.discoverHost(Const.UDP_PORT, 4000);
         this.client.connect(5000, address, Const.TCP_PORT, Const.UDP_PORT);
-//        this.client.connect(5000, "192.168.0.11", Const.TCP_PORT, Const.UDP_PORT);
+//        this.client.connect(5000, "localhost", Const.TCP_PORT, Const.UDP_PORT);
 
 
 
@@ -52,21 +51,8 @@ public class ClientNetworking {
         this.client.sendUDP(c);
     }
 
-    public String getIp() {
-        return String.valueOf(this.client.getID());
-    }
 
     private void registerCommandsWithKryo() {
-        Kryo kryo = client.getKryo();
-        kryo.register(Join.class);
-        kryo.register(Leave.class);
-        kryo.register(Shoot.class);
-        kryo.register(UpdatePosition.class);
-        kryo.register(ShowTarget.class);
-        kryo.register(TargetHit.class);
-        kryo.register(GameState.class);
-        kryo.register(Player.class);
-        kryo.register(GameEntity.class);
-        kryo.register(ArrayList.class);
+        Utils.registerCommandsWithKryo(client.getKryo());
     }
 }

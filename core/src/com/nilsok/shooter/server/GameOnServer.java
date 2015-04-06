@@ -43,14 +43,14 @@ public class GameOnServer extends Game {
             this.serverNetworking.addCommand(new GameState(this));
         }
 
-        if (nextCommand instanceof GameState) {
-            GameState clientState = (GameState) nextCommand;
-            GameState serverState = new GameState(this);
-            if (!clientState.equals(serverState)) {
-                this.serverNetworking.addCommand(serverState);
-                System.out.println("server and client state match: " + (clientState.hashCode() == serverState.hashCode()));
-            }
-        }
+//        if (nextCommand instanceof GameState) {
+//            GameState clientState = (GameState) nextCommand;
+//            GameState serverState = new GameState(this);
+//            if (!clientState.equals(serverState)) {
+//                this.serverNetworking.addCommand(serverState);
+//                System.out.println("server and client state match: " + (clientState.hashCode() == serverState.hashCode()));
+//            }
+//        }
 
     }
 

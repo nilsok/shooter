@@ -1,18 +1,11 @@
 package com.nilsok.shooter.model;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.AtomicQueue;
-import com.badlogic.gdx.utils.IntMap;
 import com.nilsok.shooter.Command;
-import com.nilsok.shooter.Const;
 import com.nilsok.shooter.model.command.*;
-import com.nilsok.shooter.server.ServerNetworking;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,21 +35,35 @@ public class Game {
             frame++;
             Command nextCommand;
             while ((nextCommand = commandQueue.poll()) != null) {
-                executeCommand(nextCommand);
+                executeCommand(nextCommand, frame);
+            }
+
+            for (Player player : this.players.values()) {
+                player.tick();
+            }
+
+        }
+
+    protected void executeCommand(Command nextCommand, long frame) {
+
+
+        if (nextCommand instanceof Move) {
+            Move move = (Move) nextCommand;
+            Player player = players.get(move.id());
+            if (player != null) {
+                player.startMoving(move.getDirection());
+                pushToClientIfServer(move);
             }
         }
 
-    protected void executeCommand(Command nextCommand) {
-
-
-        if (nextCommand instanceof UpdatePosition) {
-            UpdatePosition position = (UpdatePosition) nextCommand;
-            if (!players.containsKey(position.id())) {
-                players.put(position.id(), new Player(position.id()));
+        if (nextCommand instanceof Stop) {
+            Player player = players.get(nextCommand.id());
+            if (player != null) {
+                player.stop();
+                pushToClientIfServer(nextCommand);
             }
-            players.get(position.id()).crosshairs.setPosition(position.x, position.y);
-            pushToClientIfServer(nextCommand);
         }
+
 
         if (nextCommand instanceof Join) {
             Join join = (Join) nextCommand;

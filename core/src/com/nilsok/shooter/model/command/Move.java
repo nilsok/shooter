@@ -11,6 +11,8 @@ public class Move implements Command {
     private String playerName;
     private Direction direction;
 
+    public Move() {}
+
     public Move(String playerName, Direction direction) {
         this.playerName = playerName;
         this.direction = direction;
@@ -24,5 +26,9 @@ public class Move implements Command {
     @Override
     public long frame() {
         return 0;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }

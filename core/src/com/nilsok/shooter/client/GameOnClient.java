@@ -47,8 +47,8 @@ public class GameOnClient extends Game {
     }
 
     @Override
-    protected void executeCommand(Command nextCommand) {
-        super.executeCommand(nextCommand);
+    protected void executeCommand(Command nextCommand, long frame) {
+        super.executeCommand(nextCommand, frame);
 
         if (nextCommand instanceof GameState) {
             GameState gameState = (GameState) nextCommand;
@@ -60,7 +60,6 @@ public class GameOnClient extends Game {
             if (gameState.target != null) {
                 super.target = new Target(gameState.target.getX(), gameState.target.getY());
             }
-
         }
 
         if (nextCommand instanceof ShowTarget) {

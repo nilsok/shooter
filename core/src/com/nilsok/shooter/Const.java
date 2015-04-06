@@ -11,7 +11,8 @@ public interface Const {
     public static final int TCP_PORT = 9165;
     public static final int UDP_PORT = 9166;
 
-    public static final float TARGET_RADIUS = 100.0f;
 
-    int SHOOTING_DELAY = 30;
+    public static final int MOVEMENT_SPEED = 5;
+
+    public static final int SHOOTING_DELAY = 30;
 }
