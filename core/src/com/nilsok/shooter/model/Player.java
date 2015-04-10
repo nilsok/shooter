@@ -66,16 +66,20 @@ public class Player {
 
         if (score != player.score) return false;
         if (!crosshairs.equals(player.crosshairs)) return false;
-        if (!name.equals(player.name)) return false;
+        if (direction != player.direction) return false;
+        if (movementState != player.movementState) return false;
+        if (name != null ? !name.equals(player.name) : player.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + crosshairs.hashCode();
         result = 31 * result + score;
+        result = 31 * result + movementState.hashCode();
+        result = 31 * result + direction.hashCode();
         return result;
     }
 }

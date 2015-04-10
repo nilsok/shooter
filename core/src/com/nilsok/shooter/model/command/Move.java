@@ -10,12 +10,14 @@ public class Move implements Command {
 
     private String playerName;
     private Direction direction;
+    private long frame;
 
     public Move() {}
 
-    public Move(String playerName, Direction direction) {
+    public Move(String playerName, Direction direction, long frame) {
         this.playerName = playerName;
         this.direction = direction;
+        this.frame = frame;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Move implements Command {
 
     @Override
     public long frame() {
-        return 0;
+        return this.frame;
     }
 
     public Direction getDirection() {

@@ -1,6 +1,5 @@
 package com.nilsok.shooter.model;
 
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by fimpen on 15-01-24.

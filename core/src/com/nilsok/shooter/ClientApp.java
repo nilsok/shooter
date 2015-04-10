@@ -28,6 +28,8 @@ public class ClientApp extends ApplicationAdapter {
     String playerName;
     State state;
 
+    int framesSinceStateSend = 0;
+
 	@Override
 	public void create () {
         renderer = new GameRenderer();
@@ -43,7 +45,12 @@ public class ClientApp extends ApplicationAdapter {
         } else { // State == PLAYING
             game.tick();
             renderer.render(game);
-            networking.sendCommand(new GameState(game));
+
+            if (framesSinceStateSend >= 60) {
+                networking.sendCommand(new GameState(game));
+                framesSinceStateSend = 0;
+            }
+            framesSinceStateSend++;
         }
 	}
 
@@ -72,21 +79,22 @@ public class ClientApp extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
 
                 if (keycode == Input.Keys.UP) {
-                    networking.sendCommand(new Move(playerName, Direction.UP));
+                    networking.sendCommand(new Move(playerName, Direction.UP, game.getCurrentFrame()));
                     return true;
                 } else if (keycode == Input.Keys.DOWN) {
-                    networking.sendCommand(new Move(playerName, Direction.DOWN));
+                    networking.sendCommand(new Move(playerName, Direction.DOWN, game.getCurrentFrame()));
                     return true;
                 } else if (keycode == Input.Keys.LEFT) {
-                    networking.sendCommand(new Move(playerName, Direction.LEFT));
+                    networking.sendCommand(new Move(playerName, Direction.LEFT, game.getCurrentFrame()));
                     return true;
                 }  else if (keycode == Input.Keys.RIGHT) {
-                    networking.sendCommand(new Move(playerName, Direction.RIGHT));
+                    networking.sendCommand(new Move(playerName, Direction.RIGHT, game.getCurrentFrame()));
                     return true;
                 } else if (keycode == Input.Keys.SPACE) {
                     networking.sendCommand(new Shoot(playerName,
                             game.players.get(playerName).crosshairs.getX(),
-                            game.players.get(playerName).crosshairs.getY()));
+                            game.players.get(playerName).crosshairs.getY(),
+                            game.getCurrentFrame()));
                     return true;
                 }
                 return false;
@@ -94,7 +102,7 @@ public class ClientApp extends ApplicationAdapter {
 
             @Override
             public boolean keyUp(int keycode) {
-                networking.sendCommand(new Stop(playerName));
+                networking.sendCommand(new Stop(playerName, game.getCurrentFrame()));
                 return true;
             }
 

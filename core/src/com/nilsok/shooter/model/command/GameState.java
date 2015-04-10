@@ -18,6 +18,7 @@ public class GameState implements Command {
 
     public Collection<Player> players;
     public GameEntity target;
+    public long frame;
 
 
     public GameState() {}
@@ -25,6 +26,7 @@ public class GameState implements Command {
     public GameState(Game game) {
         this.players = new ArrayList<Player>(game.players.values().size());
         this.players.addAll(game.players.values());
+        this.frame = game.getCurrentFrame();
 
         if (game.target != null) {
             target = new GameEntity(game.target.getX(), game.target.getY(), 10, 10);
@@ -58,6 +60,6 @@ public class GameState implements Command {
 
     @Override
     public long frame() {
-        return 0;
+        return frame;
     }
 }

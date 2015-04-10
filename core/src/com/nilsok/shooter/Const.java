@@ -12,7 +12,7 @@ public interface Const {
     public static final int UDP_PORT = 9166;
 
 
-    public static final int MOVEMENT_SPEED = 5;
+    public static final int MOVEMENT_SPEED = 1;
 
     public static final int SHOOTING_DELAY = 30;
 }

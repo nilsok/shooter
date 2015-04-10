@@ -1,6 +1,7 @@
 package com.nilsok.shooter;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.nilsok.shooter.server.GameOnServer;
 
 /**
@@ -13,6 +14,7 @@ public class ServerApp implements ApplicationListener {
     @Override
     public void create() {
         this.game = new GameOnServer();
+
     }
 
     @Override

@@ -28,28 +28,32 @@ public class GameOnServer extends Game {
         super.tick();
         checkAndSpawnTarget();
         framesSinceLastTargetHit++;
-
     }
 
     @Override
-    public void executeCommand(Command nextCommand) {
-        super.executeCommand(nextCommand);
+    public void executeCommand(Command nextCommand, long frame) {
 
-        if (nextCommand instanceof Shoot) {
-            checkIfHit((Shoot) nextCommand);
-        }
+        System.out.println(nextCommand.getClass().getSimpleName() + ", with client frame :" + nextCommand.frame() + "server frame: " + frame);
 
-        if (nextCommand instanceof Join) {
-            this.serverNetworking.addCommand(new GameState(this));
-        }
+//        if (nextCommand.frame() == frame || nextCommand instanceof Join) {
+            super.executeCommand(nextCommand, frame);
 
-//        if (nextCommand instanceof GameState) {
-//            GameState clientState = (GameState) nextCommand;
-//            GameState serverState = new GameState(this);
-//            if (!clientState.equals(serverState)) {
-//                this.serverNetworking.addCommand(serverState);
-//                System.out.println("server and client state match: " + (clientState.hashCode() == serverState.hashCode()));
-//            }
+            if (nextCommand instanceof Shoot) {
+                checkIfHit((Shoot) nextCommand);
+            }
+
+            if (nextCommand instanceof Join) {
+                this.serverNetworking.addCommand(new GameState(this));
+            }
+
+            if (nextCommand instanceof GameState) {
+                GameState clientState = (GameState) nextCommand;
+                GameState serverState = new GameState(this);
+                System.out.println("server and client state match: " + (clientState.equals(serverState)));
+                if (!clientState.equals(serverState)) {
+                    this.serverNetworking.addCommand(serverState);
+                }
+            }
 //        }
 
     }

@@ -8,11 +8,13 @@ import com.nilsok.shooter.Command;
 public class Stop implements Command {
 
     private String playerName;
+    private long frame;
 
     public Stop() {}
 
-    public Stop(String playerName) {
+    public Stop(String playerName, long frame) {
         this.playerName = playerName;
+        this.frame = frame;
     }
 
 
@@ -23,6 +25,6 @@ public class Stop implements Command {
 
     @Override
     public long frame() {
-        return 0;
+        return frame;
     }
 }

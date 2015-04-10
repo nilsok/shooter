@@ -60,6 +60,7 @@ public class GameOnClient extends Game {
             if (gameState.target != null) {
                 super.target = new Target(gameState.target.getX(), gameState.target.getY());
             }
+            super.frame = gameState.frame;
         }
 
         if (nextCommand instanceof ShowTarget) {

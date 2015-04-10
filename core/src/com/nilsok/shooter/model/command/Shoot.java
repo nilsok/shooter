@@ -8,13 +8,15 @@ import com.nilsok.shooter.Command;
 public class Shoot implements Command {
     private String shooter;
     public int x, y;
+    public long frame;
 
     public Shoot() {}
 
-    public Shoot(String shooter, int x, int y) {
+    public Shoot(String shooter, int x, int y, long frame) {
         this.shooter = shooter;
         this.x = x;
         this.y = y;
+        this.frame = frame;
     }
 
     @Override
@@ -24,6 +26,6 @@ public class Shoot implements Command {
 
     @Override
     public long frame() {
-        return 0;
+        return frame;
     }
 }

@@ -14,6 +14,7 @@ public class Join implements Command {
 
     public Join(String name) {
         this.name = name;
+        this.frame = -1;
     }
 
     @Override

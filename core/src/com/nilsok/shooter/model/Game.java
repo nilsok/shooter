@@ -1,6 +1,7 @@
 package com.nilsok.shooter.model;
 
 import com.badlogic.gdx.utils.AtomicQueue;
+import com.esotericsoftware.minlog.Log;
 import com.nilsok.shooter.Command;
 import com.nilsok.shooter.model.command.*;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class Game {
 
         public Target target;
-        private long frame = 0;
+        protected long frame = 0;
 
         public Map<String, Player> players;
         private AtomicQueue<Command> commandQueue;
@@ -33,6 +34,7 @@ public class Game {
 
         public void tick() {
             frame++;
+            System.out.println("current frame: " + frame);
             Command nextCommand;
             while ((nextCommand = commandQueue.poll()) != null) {
                 executeCommand(nextCommand, frame);
@@ -84,4 +86,7 @@ public class Game {
         // Default does nothing
     }
 
+    public long getCurrentFrame() {
+        return frame;
+    }
 }
