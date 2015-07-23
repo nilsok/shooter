@@ -34,7 +34,7 @@ public class Game {
 
         public void tick() {
             frame++;
-            System.out.println("current frame: " + frame);
+//            System.out.println("current frame: " + frame);
             Command nextCommand;
             while ((nextCommand = commandQueue.poll()) != null) {
                 executeCommand(nextCommand, frame);

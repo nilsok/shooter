@@ -28,9 +28,9 @@ public class ClientNetworking {
         registerCommandsWithKryo();
         this.client.start();
 
-        InetAddress address = client.discoverHost(Const.UDP_PORT, 4000);
+        InetAddress address = client.discoverHost(Const.TCP_PORT, 4000);
         this.client.connect(5000, address, Const.TCP_PORT, Const.UDP_PORT);
-//        this.client.connect(5000, "localhost", Const.TCP_PORT, Const.UDP_PORT);
+//        this.client.connect(5000, "192.168.59.103", Const.TCP_PORT, Const.UDP_PORT);
 
 
 

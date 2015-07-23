@@ -39,6 +39,7 @@ public class ServerNetworking {
 
 
         this.server.start();
+        System.out.println("listening for tcp on: " + Const.TCP_PORT);
 
         this.server.addListener(new Listener() {
             @Override
